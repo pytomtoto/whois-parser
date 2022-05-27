@@ -55,6 +55,10 @@ func Prepare(text, ext string) (string, bool) { //nolint:cyclop
 		return prepareFR(text), true
 	case "ru", "su", "xn--p1ai":
 		return prepareRU(text), true
+	case "top":
+		return prepareTOP(text), true
+	case "vip":
+		return prepareVIP(text), true
 	case "fi":
 		return prepareFI(text), true
 	case "jp":
@@ -1256,6 +1260,66 @@ func preparePL(text string) string {
 		}
 
 		result += fmt.Sprintf("\n%s", strings.ReplaceAll(v, "WHOIS database responses:", "whois:"))
+	}
+
+	return result
+}
+
+// prepareTOP prepares the .top domain
+func prepareTOP(text string) string {
+
+	tokens := map[string]string{
+		"name":         "Registrant Name",
+		"e-mail":       "Registrant Email",
+		"organisation": "Registrant Organization",
+	}
+
+	result := ""
+	for _, v := range strings.Split(text, "\n") {
+		v = strings.TrimSpace(v)
+		if v == "" {
+			continue
+		}
+		if !strings.Contains(v, ":") {
+			continue
+		}
+		vs := strings.Split(v, ":")
+		if vv, ok := tokens[strings.TrimSpace(vs[0])]; ok {
+			v = fmt.Sprintf("%s: %s", vv, vs[1])
+		} else if vs[0] == "nserver" {
+			v = strings.Replace(v, ",", " ", -1)
+		}
+		result += v + "\n"
+	}
+
+	return result
+}
+
+// prepareVIP prepares the .vip domain
+func prepareVIP(text string) string {
+
+	tokens := map[string]string{
+		"domain":       "DomainInfo",
+		"name":         "Registrant Name",
+		"organisation": "Registrant Organization",
+	}
+
+	result := ""
+	for _, v := range strings.Split(text, "\n") {
+		v = strings.TrimSpace(v)
+		if v == "" {
+			continue
+		}
+		if !strings.Contains(v, ":") {
+			continue
+		}
+		vs := strings.Split(v, ":")
+		if vv, ok := tokens[strings.TrimSpace(vs[0])]; ok {
+			v = fmt.Sprintf("%s: %s", vv, vs[1])
+		} else if vs[0] == "nserver" {
+			v = strings.Replace(v, ",", " ", -1)
+		}
+		result += v + "\n"
 	}
 
 	return result

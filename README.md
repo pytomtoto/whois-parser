@@ -25,21 +25,22 @@ For binary distributions of whois information query and parsing, please download
 ## Installation
 
 ```shell
-go get github.com/likexian/whois-parser
+go get github.com/pytomtoto/whois-parser
 ```
 
 ## Importing
 
 ```go
 import (
-    "github.com/likexian/whois-parser"
+    "github.com/pytomtoto/whois-parser"
 )
 ```
 
 ## Documentation
 
 Visit the docs on [GoDoc](https://pkg.go.dev/github.com/likexian/whois-parser)
-
+Fork from github.com/likexian/whois-parser
+just add some domain parser
 ## Example
 
 ```go
